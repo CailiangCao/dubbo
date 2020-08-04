@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--应用名称-->
+    <dubbo:application name="dubbo_provider"/>
+    <!--注册中心-->
+    <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
+    <!--&lt;!&ndash;暴露指定接口&ndash;&gt;
+    <dubbo:service interface="com.itheima.service.UserService" ref="userService"/>
+
+    &lt;!&ndash;配置业务类实例&ndash;&gt;
+    <bean class="com.itheima.service.impl.UserServiceImpl" id="userService"/>-->
+
+    <!--开启dubbo注解驱动-->
+    <dubbo:annotation package="com.itheima.service"/>
+    <!--多协议配置-->
+    <dubbo:protocol name="dubbo" port="20881"/>
+    <dubbo:protocol name="rmi" port="1099"/>
+
+    <dubbo:service interface="com.itheima.service.UserService" protocol="dubbo" ref="userService"/>
+    <dubbo:service interface="com.itheima.service.HelloService" protocol="rmi" ref="helloService"/>
+
+    <!--混合-->
+    <dubbo:service interface="com.itheima.service.DemoService" ref="demoService"/>
+
+    <bean class="com.itheima.service.impl.UserServiceImpl" id="userService"/>
+    <bean class="com.itheima.service.impl.HelloServiceImpl" id="helloService"/>
+    <bean class="com.itheima.service.impl.DemoServiceImpl" id="demoService"/>
+
+    <dubbo:provider timeout="3000"/>
+
+    <!--开启检查是否有消费者-->
+    <dubbo:consumer check="true"/>
+
+
+
+
+
+</beans>
